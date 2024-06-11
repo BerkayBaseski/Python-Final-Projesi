@@ -5,6 +5,8 @@ from Hasta import Hasta
 from Personel import Personel
 
 def main():
+    pd.set_option('display.max_columns', None)  # Tüm sütunları göster
+    pd.set_option('display.expand_frame_repr', False)  # DataFrame'i yatayda tut
     try:
         # Personel nesneleri
         personel1 = Personel(1, "Kemal", "Yılmaz", "İdari", 8000)
@@ -46,15 +48,15 @@ def main():
 
         print(hasta1.__str__())
         print(hasta2.__str__())
-        print(hasta3.__str__())
+        print(hasta3.__str__() + "\n")
 
         print(f"Tedavi Süresi: {hasta1.tedavi_suresi_hesapla()} gün")
         print(f"Tedavi Süresi: {hasta2.tedavi_suresi_hesapla()} gün")
-        print(f"Tedavi Süresi: {hasta3.tedavi_suresi_hesapla()} gün")
+        print(f"Tedavi Süresi: {hasta3.tedavi_suresi_hesapla()} gün \n")
 
         # Pandas DataFrame oluşturma
         data = {
-            "personel_no": [personel1.get_personel_no(), personel2.get_personel_no(),
+            "Personel No": [personel1.get_personel_no(), personel2.get_personel_no(),
                             doktor1.get_personel_no(), doktor2.get_personel_no(),
                             doktor3.get_personel_no(), hemsire1.get_personel_no(),
                             hemsire2.get_personel_no(), hemsire3.get_personel_no(), None, None, None],
@@ -72,7 +74,7 @@ def main():
                         hemsire2.get_hastane(), hemsire3.get_hastane(), None, None, None],
             "calisma_saati": [None, None, None, None, None, hemsire1.get_calisma_saati(), hemsire2.get_calisma_saati(), hemsire3.get_calisma_saati(), None, None, None],
             "sertifika": [None, None, None, None, None, hemsire1.get_sertifika(), hemsire2.get_sertifika(), hemsire3.get_sertifika(), None, None, None],
-            "hasta_no": [None, None, None, None, None, None, None, None, hasta1.get_hasta_no(), hasta2.get_hasta_no(), hasta3.get_hasta_no()],
+            "Hasta_No": [None, None, None, None, None, None, None, None, hasta1.get_hasta_no(), hasta2.get_hasta_no(), hasta3.get_hasta_no()],
             "dogum_tarihi": [None, None, None, None, None, None, None, None, hasta1.get_dogum_tarihi(), hasta2.get_dogum_tarihi(), hasta3.get_dogum_tarihi()],
             "hastalik": [None, None, None, None, None, None, None, None, hasta1.get_hastalik(), hasta2.get_hastalik(), hasta3.get_hastalik()],
             "tedavi": [None, None, None, None, None, None, None, None, hasta1.get_tedavi(), hasta2.get_tedavi(), hasta3.get_tedavi()]
@@ -85,34 +87,37 @@ def main():
 
         # Doktorları uzmanlık alanlarına göre gruplandırarak toplam sayısını hesaplama
         doktor_sayisi = df[df['uzmanlik'] != 0].groupby('uzmanlik').size()
-        print(f"Doktor sayısı (uzmanlık alanına göre): {sum(doktor_sayisi)}")
-        print(doktor_sayisi)
+        print(f"Doktor sayısı (uzmanlık alanına göre): {sum(doktor_sayisi)} \n")
+        print(doktor_sayisi.to_string() + "\n")
 
         # 5 yıldan fazla deneyime sahip doktorların toplam sayısını bulma
-        bes_yil_doktor = df[(df['deneyim_yili'] > 5) & (df['deneyim_yili'] != 0)].shape[0]
-        print(f"5 yıldan fazla deneyime sahip doktorların toplam sayısı: {bes_yil_doktor}")
+        bes_yil_doktor = df[(df['deneyim_yili'] > 5)]
+        print(f"5 yıldan fazla deneyime sahip doktorların toplam sayısı: \n {bes_yil_doktor} \n")
 
         # Hasta adına göre DataFrame’i alfabetik olarak sıralama
-        df_hastalar = df[df['hasta_no'] != 0]
+        df_hastalar = df[df['Hasta_No'] != 0]
         df_sorted = df_hastalar.sort_values(by=['ad'])
-        print("Hasta adına göre sıralı DataFrame:")
+        print("Hasta adına göre sıralı DataFrame: \n")
         print(df_sorted)
+        print("\n")
 
         # Maaşı 7000 TL üzerinde olan personelleri bulma
         maas_7000_ustu = df[df['maas'] > 7000]
-        print("Maaşı 7000 TL üzerinde olan personeller:")
+        print("Maaşı 7000 TL üzerinde olan personeller: \n")
         print(maas_7000_ustu)
+        print("\n")
 
         # Doğum tarihi 1990 ve sonrası olan hastaları gösterme
         df['dogum_tarihi'] = pd.to_datetime(df['dogum_tarihi'])
         dogum_1990_sonrasi = df[df['dogum_tarihi'] >= '1990-01-01']
         print("Doğum tarihi 1990 sonrası olan hastalar:")
         print(dogum_1990_sonrasi)
+        print("\n")
 
 
         # Yeni DataFrame oluşturma
         yeni_df = df[['ad', 'soyad', 'departman', 'maas', 'uzmanlik', 'deneyim_yili', 'hastalik', 'tedavi']]
-        print("Yeni DataFrame:")
+        print("Yeni DataFrame: \n")
         print(yeni_df)
 
     except Exception:
